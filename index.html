@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Body mass index</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+
+  <!-- Don't use this in production: -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    body {
+      padding: 2em;
+    }
+
+    h2 {
+      margin-bottom: 1em;
+    }
+
+    div {
+      margin-bottom: 2em;
+    }
+
+    label {
+      display: inline-block;
+      width: 150px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    class BMI extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          weight: 0,
+          height: 0,
+          bmi: 0
+        }
+      }
+
+      readValue = (event) => {
+        this.setState({ [event.target.name]: event.target.value })
+      }
+
+      calculate = (event) => {
+        event.preventDefault();
+        const { weight, height } = this.state;
+        const result = weight / (height * height) * 10000;
+        this.setState({ bmi: result });
+      }
+
+      render() {
+        const { weight, height, bmi } = this.state;
+        return (
+          <div>
+            <h2>Calculate body mass index</h2>
+            <form onSubmit={this.calculate}>
+              <div>
+                <label>Weight (in kg)</label>
+                <input name="weight" type="number" value={weight} onChange={this.readValue} />
+              </div>
+              <div>
+                <label>Height (in cm)</label>
+                <input name="height" type="number" value={height} onChange={this.readValue} />
+              </div>
+              <div>
+                <label>BMI</label>
+                <output>{bmi.toFixed(0)}</output>
+              </div>
+              <button>Calculate</button>
+            </form>
+          </div>
+        )
+      }
+
+    }
+
+    ReactDOM.render(<BMI />, document.getElementById('root'));
+
+  </script>
+
+</body>
+
+</html>
